@@ -5,10 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Reflection.Emit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
+using BulkyBook.Models.ViewModels;
 
 namespace BulkyBook.DataAccess.Data
 {
-	public class ApplicationDbContext : IdentityDbContext
+	public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 	{
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)  : base(options) 
         {
@@ -17,6 +20,9 @@ namespace BulkyBook.DataAccess.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<ApplicationUser> applicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
          {
             base.OnModelCreating(modelBuilder);
@@ -26,6 +32,30 @@ namespace BulkyBook.DataAccess.Data
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
            );
+
+            modelBuilder.Entity<Company>().HasData(
+             new Company {  Id = 1,Name = "Tech Solution", StreetName = "123 Tech St",City = "Tech City",
+                              PostalCode = "12121", State = "IL", PhoneNumber = "6669990000"},
+                        new Company
+                        {
+                            Id = 2,
+                            Name = "Vivid Books",
+                            StreetName = "999 Vid St",
+                            City = "Vid City",
+                            PostalCode = "66666",
+                            State = "IL",
+                            PhoneNumber = "7779990000"
+                        },
+                new Company
+                {
+                    Id = 3,
+                    Name = "Readers Club",
+                    StreetName = "999 Main St",
+                    City = "Lala land",
+                    PostalCode = "99999",
+                    State = "NY",
+                    PhoneNumber = "1113335555"
+                } );
             modelBuilder.Entity<Product>().HasData(
               new Product
               {
